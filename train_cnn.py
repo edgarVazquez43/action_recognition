@@ -18,6 +18,7 @@ import os.path
 
 data = DataSet()
 
+######### Keras Callbacks  #########
 # Helper: Save the model.
 checkpointer = ModelCheckpoint(
     filepath=os.path.join('data', 'checkpoints', 'inception.{epoch:03d}-{val_loss:.2f}.hdf5'),
@@ -29,6 +30,9 @@ early_stopper = EarlyStopping(patience=10)
 
 # Helper: TensorBoard
 tensorboard = TensorBoard(log_dir=os.path.join('data', 'logs'))
+
+
+
 
 def get_generators():
     train_datagen = ImageDataGenerator(
@@ -56,6 +60,7 @@ def get_generators():
         class_mode='categorical')
 
     return train_generator, validation_generator
+
 
 def get_model(weights='imagenet'):
     # create the base pre-trained model
@@ -101,8 +106,8 @@ def freeze_all_but_mid_and_top(model):
         optimizer=SGD(lr=0.0001, momentum=0.9),
         loss='categorical_crossentropy',
         metrics=['accuracy', 'top_k_categorical_accuracy'])
-
     return model
+
 
 def train_model(model, nb_epoch, generators, callbacks=[]):
     train_generator, validation_generator = generators
